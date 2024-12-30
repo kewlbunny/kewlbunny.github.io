@@ -39,6 +39,9 @@
       touch-action: manipulation;
       -webkit-text-size-adjust: 100%;
     }
+    * {
+      max-width: 100vw;
+    }
     .no-select {
       -webkit-user-select: none;  /* Safari and Chrome */
       -moz-user-select: none;     /* Firefox */
@@ -69,7 +72,6 @@
       width: 512px;
       height: 512px;
       overflow: hidden;
-      margin-left: 3rem;
       position: relative;
     }
     #code-rain {
@@ -78,7 +80,12 @@
       left: 0;
     }
     .bunny-mask {
+      height: 100%;
+      width: 100%;
       position: absolute;
+      background-image: url(./public/images/landing/mask.png);
+      background-attachment: fixed;
+      background-position: center;
       z-index: 1;
     }
     .heading-text {
@@ -138,7 +145,7 @@
   <p class="heading-text no-select">/kewlbunny.com</p>
   <div class="code-rain-container">
     <canvas id="code-rain" class="no-drag" draggable="false"></canvas>
-    <img class="bunny-mask no-select no-drag" draggable="false" src="./public/images/landing/mask.png" alt="kewlbunny" />
+    <div class="bunny-mask no-select no-drag" draggable="false"></div>
   </div>
   <div class="links">
     <a href="https://bsky.app/profile/kewlbunny.bsky.social" target="_blank" data-label="bsky">bsky</a>
