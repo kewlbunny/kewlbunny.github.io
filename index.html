@@ -1,55 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <title>kewlbunny</title>
   <style>
     @font-face {
-      font-family: 'Scratch';
+      font-family: 'TahomaXP';
       font-style: normal;
       font-weight: 400;
-      src: url(./public/fonts/Scratch.ttf) format('truetype');
+      src: url(./public/fonts/TahomaXP.ttf) format('truetype');
     }
-
     body {
       background-color: #000000;
-      color: #ffffff;
-      font-family: 'Scratch', serif;
-      font-size: 32px;
+      color: #efefef;
       display: flex;
+      font-family: 'TahomaXP';
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      letter-spacing: -3px;
       height: 100vh;
       margin: 0;
+      overflow-x: hidden;
     }
-
-    .portrait img {
-      width: 240px;
-      height: 320px;
-      object-fit: cover;
+    .no-select {
+      -webkit-user-select: none;  /* Safari and Chrome */
+      -moz-user-select: none;     /* Firefox */
+      -ms-user-select: none;      /* IE/Edge */
+      user-select: none;          /* Standard syntax */
     }
-
+    .no-drag {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+    }
+    ::selection {
+      background: #ffb7b7;
+      color: #000000;
+    }
+    ::-moz-selection {
+      background: #ffb7b7;
+      color: #000000;
+    }
+    .custom-highlight::selection {
+      background: #ffb7b7;
+    }
+    .custom-highlight::-moz-selection {
+      background: #ffb7b7;
+    }
+    .code-rain-container {
+      width: 512px;
+      height: 512px;
+      overflow: hidden;
+      margin-left: 3rem;
+      position: relative;
+    }
+    #code-rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .bunny-mask {
+      position: absolute;
+      z-index: 1;
+    }
+    .heading-text {
+      font-size: 3rem;
+      padding-top: 1rem;
+      margin: 0rem;
+    }
     .links {
-      margin-top: 20px;
+      padding: 1rem;
       text-align: center;
+      font-size: 24px;
+      width: 100%;
     }
-
     .links a {
-      color: #ffffff;
+      color: #e9e9eb;
       text-decoration: none;
       margin: 0 10px;
       display: inline-block;
       position: relative;
     }
-
     .links a:hover {
       color: transparent;
     }
-
     .links a:hover::before,
     .links a:hover::after {
       content: attr(data-label);
@@ -58,62 +101,203 @@
       top: 0;
       width: 100%;
       height: 100%;
-      color: #f2f2f2;
+      color: #e2e2e2;
       overflow: hidden;
     }
-
     .links a:hover::before {
       left: 2px;
       text-shadow: -2px 0 #ad353d;
       animation: glitch 1s infinite;
     }
-
     .links a:hover::after {
       left: -2px;
-      text-shadow: -2px 0 #442bab;
+      text-shadow: -2px 0 #242b4b;
       animation: glitch 1s infinite;
     }
-
     @keyframes glitch {
-      0% {
-        clip: rect(2px, 9999px, 50px, 0);
-      }
-
-      25% {
-        clip: rect(10px, 9999px, 75px, 0);
-      }
-
-      50% {
-        clip: rect(10px, 9999px, 30px, 0);
-      }
-
-      75% {
-        clip: rect(2px, 9999px, 40px, 0);
-      }
-
-      100% {
-        clip: rect(20px, 9999px, 60px, 0);
-      }
+      0% { clip: rect(2px, 9999px, 50px, 0); }
+      25% { clip: rect(10px, 9999px, 75px, 0); }
+      50% { clip: rect(10px, 9999px, 30px, 0); }
+      75% { clip: rect(2px, 9999px, 40px, 0); }
+      100% { clip: rect(20px, 9999px, 60px, 0); }
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div class="portrait">
-    <img src="./public/images/landing/destr0y.webp" alt="kewlbunny">
+  <p class="heading-text no-select">/kewlbunny.com</p>
+  <div class="code-rain-container">
+    <canvas id="code-rain" class="no-drag" draggable="false"></canvas>
+    <img class="bunny-mask no-select no-drag" draggable="false" src="./public/images/landing/mask.png" alt="kewlbunny" />
   </div>
   <div class="links">
-    <a href="https://soundcloud.com/kewlbunny" target="_blank" data-label="soundcloud">soundcloud</a>
-    <a href="https://www.youtube.com/@kewlbunny" target="_blank" data-label="youtube">youtube</a>
     <a href="https://bsky.app/profile/kewlbunny.bsky.social" target="_blank" data-label="bsky">bsky</a>
     <a href="https://x.com/h4ckth4pl4net" target="_blank" data-label="twitter">twitter</a>
+    <a href="https://soundcloud.com/kewlbunny" target="_blank" data-label="soundcloud">soundcloud</a>
+    <a href="https://youtube.com/@kewlbunny" target="_blank" data-label="youtube">youtube</a>
     <br />
     <a href="https://www.patreon.com/c/kewlbunny" target="_blank" data-label="patreon">patreon</a>
     <a href="https://ko-fi.com/kewlbunny" target="_blank" data-label="ko-fi">ko-fi</a>
     <a href="https://vrchat.com/home/user/usr_550b9025-d3b9-47e1-9d81-62f01526e284" target="_blank" data-label="vrchat">vrchat</a>
     <a href="https://kewlbunny.bandcamp.com" target="_blank" data-label="bandcamp">bandcamp</a>
   </div>
-</body>
 
+  <script>
+    // Code rain configuration
+    const config = {
+      canvas: document.getElementById('code-rain'),
+      grid: { width: 24, height: 32 },
+      timing: {
+        columnBrightenInterval: 2000,
+        brightenDuration: 1500,
+        pulseDuration: 2000,
+        characterChangeInterval: 100,
+        characterChangeDuration: 3000
+      },
+      probabilities: {
+        columnBrighten: 0.1,
+        characterPulse: 0.3,
+        characterChange: 0.05
+      },
+      characters: "兎", // Bunny kanji
+      colors: {
+        trail: '#8c898a',
+        head: '#ffffff',
+        pulse: '#a39bbf',
+        brightened: '#bfabb4'
+      }
+    };
+
+    // Initialize canvas
+    const ctx = config.canvas.getContext('2d');
+    const container = document.querySelector('.code-rain-container');
+    const dpr = window.devicePixelRatio || 1;
+
+    function resizeCanvas() {
+      const rect = container.getBoundingClientRect();
+      config.canvas.width = rect.width * dpr;
+      config.canvas.height = rect.height * dpr;
+      config.canvas.style.width = `${rect.width}px`;
+      config.canvas.style.height = `${rect.height}px`;
+      ctx.scale(dpr, dpr);
+
+      // Update character size based on canvas dimensions
+      config.charSize = rect.width / config.grid.width;
+      ctx.font = `${config.charSize}px sans-serif`;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Column class to manage individual rain columns
+    class RainColumn {
+      constructor(x) {
+        this.x = x;
+        this.characters = [];
+        this.lastBrightenTime = 0;
+        this.isBrightened = false;
+        this.speed = 100 + Math.random() * 50;
+        this.startTime = performance.now() + Math.random() * 3000;
+      }
+
+      addCharacter(timestamp) {
+        if (this.characters.length > config.grid.height) {
+          this.characters.shift();
+        }
+        const char = {
+          value: config.characters[Math.floor(Math.random() * config.characters.length)],
+          isHead: true,
+          isPulsing: false,
+          opacity: 1,
+          createTime: timestamp
+        };
+
+        if (this.characters.length > 0) {
+          this.characters[this.characters.length - 1].isHead = false;
+          if (Math.random() < config.probabilities.characterPulse) {
+            this.characters[this.characters.length - 1].isPulsing = true;
+            this.characters[this.characters.length - 1].pulseStartTime = timestamp;
+          }
+        }
+        this.characters.push(char);
+      }
+
+      update(timestamp) {
+        // Handle column brightening
+        if (timestamp - this.lastBrightenTime >= config.timing.columnBrightenInterval) {
+          if (Math.random() < config.probabilities.columnBrighten) {
+            this.isBrightened = true;
+            this.brightenStartTime = timestamp;
+          }
+          this.lastBrightenTime = timestamp;
+        }
+        if (this.isBrightened && timestamp - this.brightenStartTime >= config.timing.brightenDuration) {
+          this.isBrightened = false;
+        }
+        // Add new characters based on speed
+        if (timestamp >= this.startTime) {
+          if (!this.lastCharTime || timestamp - this.lastCharTime >= this.speed) {
+            this.addCharacter(timestamp);
+            this.lastCharTime = timestamp;
+          }
+        }
+        // Update character states
+        this.characters.forEach(char => {
+          if (char.isHead) {
+            char.opacity = Math.max(0, 1 - (timestamp - char.createTime) / config.timing.characterChangeDuration);
+          } else if (char.isPulsing) {
+            const pulseProgress = (timestamp - char.pulseStartTime) / config.timing.pulseDuration;
+            char.opacity = Math.max(0.3, 0.8 * (1 - pulseProgress));
+            if (pulseProgress >= 1) char.isPulsing = false;
+          } else {
+            char.opacity = 0.3;
+          }
+        });
+      }
+
+      draw(ctx) {
+        this.characters.forEach((char, i) => {
+          const y = (i + 1) * config.charSize;
+
+          // Opinionated color choices
+          if (char.isHead) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${char.opacity})`;
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = 12;
+          } else if (char.isPulsing) {
+            ctx.fillStyle = `rgba(163, 155, 191, ${char.opacity})`;
+            ctx.shadowColor = '#b39bbf';
+            ctx.shadowBlur = 4;
+          } else if (this.isBrightened) {
+            ctx.fillStyle = `rgba(191, 171, 180, ${char.opacity})`;
+            ctx.shadowColor = '#b39b8f';
+            ctx.shadowBlur = 4;
+          } else {
+            ctx.fillStyle = `rgba(140, 137, 138, ${char.opacity})`;
+            ctx.shadowBlur = 0;
+          }
+          ctx.fillText(char.value, this.x * config.charSize, y);
+        });
+      }
+    }
+
+    // Create rain columns
+    const columns = Array.from({ length: config.grid.width }, (_, i) => new RainColumn(i));
+
+    // Animation loop
+    function animate(timestamp) {
+      ctx.clearRect(0, 0, config.canvas.width, config.canvas.height);
+
+      columns.forEach(column => {
+        column.update(timestamp);
+        column.draw(ctx);
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
 </html>
