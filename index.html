@@ -19,12 +19,10 @@
       font-weight: 400;
       src: url(./public/fonts/TahomaXP.ttf) format('truetype');
     }
-    html {
-      background-color: black;
-    }
     body {
-      background-color: #000000;
+      background-color: #f3dae0;
       color: #efefef;
+      transition: background-color 1.2s ease, color 1.2s ease;
       display: flex;
       font-family: 'TahomaXP';
       justify-content: center;
@@ -81,7 +79,8 @@
       width: 100%;
     }
     .links a {
-      color: #e9e9eb;
+      color: #2a0b22;
+      transition: color 1.2s ease, text-shadow 1.2s ease;
       text-decoration: none;
       margin: 0 10px;
       display: inline-block;
@@ -89,6 +88,7 @@
     }
     .links a:hover {
       color: transparent;
+      transition: none;
     }
     .links a:hover::before,
     .links a:hover::after {
@@ -98,7 +98,7 @@
       top: 0;
       width: 100%;
       height: 100%;
-      color: #e2e2e2;
+      color: #000000;
       overflow: hidden;
     }
     .links a:hover::before {
@@ -110,6 +110,18 @@
       left: -2px;
       text-shadow: -2px 0 #242b4b;
       animation: glitch 1s infinite;
+    }
+    /* dark mode, toggled by the player-time watcher below */
+    body.dark {
+      background-color: #010f0a;
+      color: #edfde9;
+    }
+    body.dark .links a {
+      color: #edfde9;
+    }
+    body.dark .links a:hover::before,
+    body.dark .links a:hover::after {
+      color: #2a0b22;
     }
     @keyframes glitch {
       0% { clip: rect(2px, 9999px, 50px, 0); }
@@ -123,7 +135,7 @@
 </head>
 
 <body>
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/B91JfFg0ec0?si=DXAcuHerx62Cv0pe" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe id="player" width="560" height="315" src="https://www.youtube.com/embed/tlzxONSD3zg?si=YqXX3uAKJmYMAq42&amp;enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div class="links">
     <a href="https://bsky.app/profile/kewlbunny.com" target="_blank" data-label="bsky">bsky</a>
     <a href="https://soundcloud.com/kewlbunny" target="_blank" data-label="soundcloud">soundcloud</a>
@@ -134,5 +146,30 @@
     <a href="https://vrchat.com/home/user/usr_550b9025-d3b9-47e1-9d81-62f01526e284" target="_blank" data-label="vrchat">vrchat</a>
     <a href="https://kewlbunny.bandcamp.com" target="_blank" data-label="bandcamp">bandcamp</a>
   </div>
+  <script>
+    (function () {
+      var SIDE_B_TIME = 1 * 3600 + 6 * 60 + 22;
+      var player;
+
+      function sync() {
+        if (!player || typeof player.getCurrentTime !== 'function') return;
+        var t = player.getCurrentTime();
+        if (typeof t !== 'number' || isNaN(t)) return;
+        document.body.classList.toggle('dark', t >= SIDE_B_TIME);
+      }
+      window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player('player', {
+          events: {
+            onReady: sync,
+            onStateChange: sync
+          }
+        });
+        setInterval(sync, 250);
+      };
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+    })();
+  </script>
 </body>
 </html>
